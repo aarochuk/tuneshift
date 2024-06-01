@@ -1,5 +1,11 @@
+import './Home.css';
+
 export default function Home() {
   return (
+    <>
+    <div className='tester'>
+
+    </div>
     <div className="home-root">
       <header>
         <h1>jamshift</h1>
@@ -20,5 +26,6 @@ export default function Home() {
         <p>Github</p>
       </footer>
     </div>
+    </>
   );
 }
