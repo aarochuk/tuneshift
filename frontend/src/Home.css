@@ -15,6 +15,7 @@ header{
     align-items: center;
     justify-content: space-around;
     height: 60vh;
+    margin-inline: 5%;
 }
 
 footer{
@@ -22,11 +23,12 @@ footer{
     align-items: center;
     justify-content: center;
     height: 20vh;
+    gap: 5em;
 }
 
 .top-login{
     width: 17em;
-    height: 4.5em;
+    height: 3.5em;
     background-color: #F2FFE9;
     border: none;
     outline: none;
@@ -35,4 +37,58 @@ footer{
     color: #0A6847;
     font-family:"Plus Jakarta Sans", sans-serif;
     font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    justify-content: center;
+}
+
+
+.top-login:hover{
+    cursor: pointer;
+}
+
+.wizzy-boi{
+    height: 15em;
+    border-radius: 1em;
+    align-self: center;
+    margin-block-start: 1em;
+    margin-bottom: 1em;
+    margin-inline-start: 1em;
+}
+
+.main-text{
+    width: 55%;
+}
+
+.img-holder{
+    background-color: #F2FFE9;
+    height: 22em;
+    width: 17em;
+    color: #0A6847;
+    border-radius: 1em;
+}
+
+.img-holder > p{
+    margin: 0;
+}
+
+.genre, .sartist{
+    font-size: 0.8em;
+    padding-inline-start: 1em;
+    padding-bottom: 0.2em;
+    font-weight: 600;
+}
+
+.sname{
+    padding-inline-start: 0.6em;
+    font-size: 1.2em;
+    padding-bottom: 0.2em;
+    font-weight: 600;
+}
+
+.wiz{
+    width: 100%;
+    display: flex;
+    align-items: center;
 }
