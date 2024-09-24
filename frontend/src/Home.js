@@ -3,12 +3,18 @@ import wizkid from "./wizkid.jpg";
 import spotify from "./spotify.png";
 import gh from "./github.png";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  let navigate = useNavigate();
+
   const loginSpotify = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:5000/spotifyAuth");
-      console.log(response);
+      console.log(response.data)
+      if (response.data.state == 1){
+        navigate("/dashboard")
+      }
     } catch (error) {
       console.log("Error Occured");
     }
