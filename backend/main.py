@@ -110,6 +110,22 @@ def addBillboard():
     playlist_id = new_playlist['id']
     auth.playlist_add_items('6mpPSaogl0uVqoBNuDBP4H', song_uri)
 
+@app.route("/removesong")
+def removeSong():
+    return "remove song"
+
+@app.route("/createPlaylist")
+def createPlaylist():
+    return "create playlist"
+
+@app.route("/sharePlaylist")
+def sharePlaylist():
+    return "share playlist"
+    
+@app.route("/addsong")
+def addSong():
+    return "add song"
+
 @app.route("/logout")
 def logout():
     return "log out"

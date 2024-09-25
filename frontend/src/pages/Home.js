@@ -1,7 +1,7 @@
 import "./Home.css";
-import wizkid from "./wizkid.jpg";
-import spotify from "./spotify.png";
-import gh from "./github.png";
+import wizkid from "../assets/wizkid.jpg";
+import spotify from "../assets/spotify.png";
+import gh from "../assets/github.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
