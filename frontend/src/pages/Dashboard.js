@@ -1,6 +1,6 @@
 import "./Dashboard.css";
 import wizkid from "../assets/wizkid.jpg";
-import arrow from "../assets/down-arrow.png";
+import question from "../assets/question.png";
 import { useState } from "react";
 
 export default function Dashboard() {
@@ -144,9 +144,10 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div>
-          <button>help</button>
-          <button>Create Playlist</button>
+        <div className="bottomButtons">
+          {/* add functionality where when you click these buttons new screen would come on top of the screen, the screen darkens and you can use the functionality of these buttons */}
+          <button className="helpButton"><img src={question}/><p>Help</p></button>
+          <button className="createButton">Create Playlist</button>
         </div>
       </div>
     </div>

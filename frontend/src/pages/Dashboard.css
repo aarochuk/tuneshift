@@ -135,3 +135,31 @@ header{
 .songCard > .otherSongDetails p{
     font-weight: 400;
 }
+
+.helpButton, .createButton{
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+    width: 12em;
+    background-color: #0A6847;
+    color: #FFFBE6;
+    height: 3.5em;
+    border: none;
+    outline: none;
+    border-radius: 2em;
+    font-weight: 600;
+    font-family:"Plus Jakarta Sans", sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.helpButton img{
+    width: 1.2em;
+}
+
+.bottomButtons{
+    display: flex;
+    gap: 2em;
+    margin-bottom: 2em;
+}
