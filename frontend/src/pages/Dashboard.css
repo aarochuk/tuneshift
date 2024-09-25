@@ -1,4 +1,81 @@
 .dashboardBody{
-    background-color: #F2FFE9;
+    background-color: #FFFBE6;
     color: #0A6847;
+}
+
+header{
+    padding-inline: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerImg{
+    width: 5em;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.addContainer{
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    align-items: center;
+}
+
+.songInput{
+    border-radius: 2em;
+    outline: none;
+    border-color: #0A6847;
+    height: 4em;
+    width: 30em;
+    padding-inline: 2em;
+}
+
+.headerHolder{
+    display: flex;
+    gap: 2em;
+    align-items: center;
+    justify-content: center;
+}
+
+.headerHolder > button{
+    width: 10em;
+    height: 3.5em;
+    background-color: #0A6847;
+    border: none;
+    outline: none;
+    border-radius: 2em;
+    font-weight: 600;
+    color: #FFFBE6;
+    font-family:"Plus Jakarta Sans", sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.addContainer > select{
+    width: 12em;
+    height: 3.5em;
+    background-color: #0A6847;
+    border: none;
+    outline: none;
+    border-radius: 2em;
+    font-weight: 600;
+    color: #FFFBE6;
+    font-family:"Plus Jakarta Sans", sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+    padding-inline: 1.5em;
+}
+
+.addSelection{
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    justify-content: center;
+}
+
+.addSelection > img{
+    width: 2.5em;
+    cursor: pointer;
 }
