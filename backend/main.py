@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sys
 import spotipy
@@ -23,6 +23,11 @@ def spotifyAuth():
         )
     )
     return auth.me()
+
+@app.route("/addSong", methods=['POST'])
+def addSong():
+    print(request.get_json())
+    return {"hello": "world"}
 
 @app.route("/addApplePlaylist")
 def addApplePlaylist():
@@ -120,14 +125,8 @@ def removeSong():
 @app.route("/createPlaylist")
 def createPlaylist():
     return "create playlist"
-
-@app.route("/sharePlaylist")
-def sharePlaylist():
-    return "share playlist"
     
-@app.route("/addsong")
-def addSong():
-    return "add song"
+
 
 @app.route("/logout")
 def logout():

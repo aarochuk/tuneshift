@@ -1,20 +1,48 @@
 import "./Dashboard.css";
 import wizkid from "../assets/wizkid.jpg";
 import question from "../assets/question.png";
+import search from "../assets/search.png";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Dashboard({route, navigation}) {
   const {state} = useLocation();
   const [showLog, setShowLog] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [method, setMethod] = useState("name");
+  const [method, setMethod] = useState("song");
   const [songList, addSongList] = useState([]);
+  const [searchVal, setSearchVal] = useState("");
 
-  function addSong(){}
+  function methodChange(e) {
+    setMethod(e.target.value);
+  }
+
+  // add error handling and make sure searches are not done unless the searchVal is actually set to something
+
+  function findSong(){
+    if(method==="song"){
+      addSong()
+    }else if(method==="billboard"){
+      billboard()
+    }else{
+      applePlaylist()
+    }
+  }
+
+  const addSong = async () => {
+    console.log(searchVal)
+    try {
+      const response = await axios.post("http://127.0.0.1:8080/addSong", {song: searchVal});
+      console.log(response.data);
+    } catch (error) {
+      console.log("Error Occured");
+    }
+  };
+
   function billboard(){}
   function applePlaylist(){}
-  console.log(state)
+  //console.log(state)
   return(
     <div className="dashboardBody">
       <header>
@@ -27,9 +55,13 @@ export default function Dashboard({route, navigation}) {
       </header>
       <div className="addContainer">
         <h2>Add Song(s)</h2>
-        <input placeholder="Enter song name" className="songInput"/>
+        <div className="inputBox">
+          <input placeholder="Enter song name" value={searchVal} onChange={e=>setSearchVal(e.target.value)}/>
+          <img src={search} onClick={findSong}/>
+        </div>
+        
         {/* make the values of the select proper */}
-        <select value={"blah"}>
+        <select value={method} onChange={methodChange}>
           <option value="song">Song Name</option>
           <option value="billboard">Add Billboard hot 100</option>
           <option value="apple">Add Apple Playlist</option>

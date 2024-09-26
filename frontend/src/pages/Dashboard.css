@@ -25,15 +25,6 @@ header{
     align-items: center;
 }
 
-.songInput{
-    border-radius: 2em;
-    outline: none;
-    border-color: #0A6847;
-    height: 4em;
-    width: 30em;
-    padding-inline: 2em;
-}
-
 .headerHolder{
     display: flex;
     gap: 2em;
@@ -170,4 +161,29 @@ header{
     justify-content: center;
     align-items: center;
     height: 15em;
+}
+
+.inputBox{
+    border-radius: 2em;
+    border-color: #0A6847;
+    height: 4em;
+    width: 30em;
+    padding-inline: 2em;
+    align-items: center;
+    display: flex;
+    background-color: white;
+    justify-content: space-between;
+}
+
+.inputBox > input {
+    outline: none;
+    border: none;
+    height: 120%;
+    width: 90%;
+    font-family:"Plus Jakarta Sans", sans-serif;
+}
+
+.inputBox > img {
+    width: 2em;
+    cursor: pointer;
 }
