@@ -10,11 +10,10 @@ export default function Home() {
 
   const loginSpotify = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/spotifyAuth");
+      const response = await axios.get("http://127.0.0.1:8080/spotifyAuth");
       console.log(response.data)
-      if (response.data.state == 1){
-        navigate("/dashboard")
-      }
+      // make this a conditional statement to go to dashboard
+      if(response.status === 200) navigate("/dashboard", {state: response.data})
     } catch (error) {
       console.log("Error Occured");
     }

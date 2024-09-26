@@ -1,17 +1,20 @@
 import "./Dashboard.css";
 import wizkid from "../assets/wizkid.jpg";
 import question from "../assets/question.png";
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
 
-export default function Dashboard() {
+export default function Dashboard({route, navigation}) {
+  const {state} = useLocation();
   const [showLog, setShowLog] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [method, setMethod] = useState("name");
+  const [songList, addSongList] = useState([]);
 
   function addSong(){}
   function billboard(){}
   function applePlaylist(){}
-
+  console.log(state)
   return(
     <div className="dashboardBody">
       <header>
@@ -19,7 +22,7 @@ export default function Dashboard() {
         {/* replace with users spotify image */}
         <div className="headerHolder">
           {showLog && <button>logout</button>}
-          <img className="headerImg" onClick={() => setShowLog(!showLog)} src={wizkid} alt="holder"/>
+          <img className="headerImg" onClick={() => setShowLog(!showLog)} src={state.images[1].url} alt="holder"/>
         </div>
       </header>
       <div className="addContainer">
@@ -32,7 +35,9 @@ export default function Dashboard() {
           <option value="apple">Add Apple Playlist</option>
         </select>
       </div>
-      <div className="songsHolder">
+      {/* create display for if there are no songs that says there are no songs added yet or something */}
+      {/* if there are multiple songs with the same name from the songs the user wants to add make screen for them to select the right one */}
+      {songList.length > 0 && <div className="songsHolder">
         <div className="songsHeader">
           <div className="songNameHolder">
             <p>Name</p>
@@ -43,7 +48,6 @@ export default function Dashboard() {
             <p>Genre</p>
           </div>
         </div>
-        {/* create display for if there are no songs that says there are no songs added yet or something */}
         <div className="songs">
           <div className="songCard">
             <div className="songNameHolder">
@@ -149,7 +153,12 @@ export default function Dashboard() {
           <button className="helpButton"><img src={question}/><p>Help</p></button>
           <button className="createButton">Create Playlist</button>
         </div>
-      </div>
+      </div>}
+      
+      {songList.length === 0 &&
+      <div className="noSongs">
+        <h2>Add to create playlist</h2>  
+      </div>}
     </div>
   )
 }

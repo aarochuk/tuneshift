@@ -11,15 +11,18 @@ CORS(app, supports_credentials=True)
 
 @app.route("/spotifyAuth")
 def spotifyAuth():
-    scope = "user-library-read"
-
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, client_id="5fd6c7ca63044657ae73acff0ee3d798", client_secret="62b4d40d59d34729a4824aab5eebe999", redirect_uri="http://localhost:3000"))
-
-    results = sp.current_user_saved_tracks()
-    for idx, item in enumerate(results['items']):
-        track = item['track']
-        print(idx, track['artists'][0]['name'], " – ", track['name'])
-    return {'state':1}
+    scope = "user-library-read playlist-modify-private"
+    auth = spotipy.Spotify(
+        auth_manager=SpotifyOAuth(
+            scope=scope,
+            redirect_uri="http://localhost:3000",
+            client_id="5fd6c7ca63044657ae73acff0ee3d798",
+            client_secret="62b4d40d59d34729a4824aab5eebe999",
+            show_dialog=True,
+            cache_path=".cache"
+        )
+    )
+    return auth.me()
 
 @app.route("/addApplePlaylist")
 def addApplePlaylist():
@@ -131,4 +134,4 @@ def logout():
     return "log out"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
