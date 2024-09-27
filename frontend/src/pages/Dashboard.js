@@ -100,21 +100,6 @@ export default function Dashboard({route, navigation}) {
             </div>
           </div>)
           })}
-          
-          <div className="songCard">
-            <div className="songNameHolder">
-              <img src={wizkid}/>
-              <div>
-                <p>Essense</p>
-                <p>Wizkid, Tems</p>
-              </div>
-            </div>
-            <div className="otherSongDetails">
-              <p>3:33</p>
-              <p>Made in Lagos</p>
-              <p>Afrobeat</p>
-            </div>
-          </div>
         </div>
         <div className="bottomButtons">
           {/* add functionality where when you click these buttons new screen would come on top of the screen, the screen darkens and you can use the functionality of these buttons */}
