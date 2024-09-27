@@ -9,6 +9,8 @@ import requests, os
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
+# make the authentication and use of the api proper
+
 @app.route("/spotifyAuth")
 def spotifyAuth():
     scope = "user-library-read playlist-modify-private"
@@ -26,8 +28,41 @@ def spotifyAuth():
 
 @app.route("/addSong", methods=['POST'])
 def addSong():
-    print(request.get_json())
-    return {"hello": "world"}
+    song = request.get_json()['song']
+    idd = request.get_json()['id']
+    scope = "user-library-read playlist-modify-private"
+    auth = spotipy.Spotify(
+        auth_manager=SpotifyOAuth(
+            scope=scope,
+            redirect_uri="http://localhost:3000",
+            client_id="5fd6c7ca63044657ae73acff0ee3d798",
+            client_secret="62b4d40d59d34729a4824aab5eebe999",
+            show_dialog=True,
+            cache_path=".cache"
+        )
+    )
+    res = {} 
+    if auth.search(q=song, type='track', limit=1, offset=0)['tracks']['items'] != []:
+        res = auth.search(q=song, type='track', limit=1, offset=0)['tracks']['items'][0]
+
+    millis = int(res['duration_ms'])
+    seconds=(res['duration_ms']/1000)%60
+    seconds = int(seconds)
+    minutes=(res['duration_ms']/(1000*60))%60
+    minutes = int(minutes)
+
+    response = {
+        "id": idd,
+        "artists": [x['name'] for x in res['artists']],
+        "img": res['album']['images'][0]['url'],
+        "album": res['album']['name'],
+        "title": res['name'],
+        "time": str(minutes)+":"+str(seconds).rjust(2, "0"),
+        "uri": res['uri'],
+        "link": res['external_urls']['spotify']
+    }
+
+    return response
 
 @app.route("/addApplePlaylist")
 def addApplePlaylist():

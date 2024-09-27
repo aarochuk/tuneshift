@@ -33,8 +33,10 @@ export default function Dashboard({route, navigation}) {
   const addSong = async () => {
     console.log(searchVal)
     try {
-      const response = await axios.post("http://127.0.0.1:8080/addSong", {song: searchVal});
+      const response = await axios.post("http://127.0.0.1:8080/addSong", {song: searchVal, id:songList.length});
       console.log(response.data);
+      addSongList([response.data, ...songList])
+      console.log(songList)
     } catch (error) {
       console.log("Error Occured");
     }
@@ -77,94 +79,28 @@ export default function Dashboard({route, navigation}) {
           <div className="otherSongDetails">
             <p>Time</p>
             <p>Album</p>
-            <p>Genre</p>
+            <p>Link</p>
           </div>
         </div>
         <div className="songs">
-          <div className="songCard">
+          {songList.map((song)=>{
+            return(
+            <div className="songCard" key={song.id}>
             <div className="songNameHolder">
-              <img src={wizkid}/>
+              <img src={song.img}/>
               <div>
-                <p>Essense</p>
-                <p>Wizkid, Tems</p>
+                <p>{song.title}</p>
+                <p>{song.artists.map((artist)=><span>{artist}{"   "}</span> )}</p>
               </div>
             </div>
             <div className="otherSongDetails">
-              <p>3:33</p>
-              <p>Made in Lagos</p>
-              <p>Afrobeat</p>
+              <p>{song.time}</p>
+              <p>{song.album}</p>
+              <p><a href={song.link}>{song.title}</a></p>
             </div>
-          </div>
-          <div className="songCard">
-            <div className="songNameHolder">
-              <img src={wizkid}/>
-              <div>
-                <p>Essense</p>
-                <p>Wizkid, Tems</p>
-              </div>
-            </div>
-            <div className="otherSongDetails">
-              <p>3:33</p>
-              <p>Made in Lagos</p>
-              <p>Afrobeat</p>
-            </div>
-          </div>
-          <div className="songCard">
-            <div className="songNameHolder">
-              <img src={wizkid}/>
-              <div>
-                <p>Essense</p>
-                <p>Wizkid, Tems</p>
-              </div>
-            </div>
-            <div className="otherSongDetails">
-              <p>3:33</p>
-              <p>Made in Lagos</p>
-              <p>Afrobeat</p>
-            </div>
-          </div>
-          <div className="songCard">
-            <div className="songNameHolder">
-              <img src={wizkid}/>
-              <div>
-                <p>Essense</p>
-                <p>Wizkid, Tems</p>
-              </div>
-            </div>
-            <div className="otherSongDetails">
-              <p>3:33</p>
-              <p>Made in Lagos</p>
-              <p>Afrobeat</p>
-            </div>
-          </div>
-          <div className="songCard">
-            <div className="songNameHolder">
-              <img src={wizkid}/>
-              <div>
-                <p>Essense</p>
-                <p>Wizkid, Tems</p>
-              </div>
-            </div>
-            <div className="otherSongDetails">
-              <p>3:33</p>
-              <p>Made in Lagos</p>
-              <p>Afrobeat</p>
-            </div>
-          </div>
-          <div className="songCard">
-            <div className="songNameHolder">
-              <img src={wizkid}/>
-              <div>
-                <p>Essense</p>
-                <p>Wizkid, Tems</p>
-              </div>
-            </div>
-            <div className="otherSongDetails">
-              <p>3:33</p>
-              <p>Made in Lagos</p>
-              <p>Afrobeat</p>
-            </div>
-          </div>
+          </div>)
+          })}
+          
           <div className="songCard">
             <div className="songNameHolder">
               <img src={wizkid}/>
