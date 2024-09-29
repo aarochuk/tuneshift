@@ -31,7 +31,7 @@ export default function Dashboard({route, navigation}) {
   }
 
   const addSong = async () => {
-    console.log(searchVal)
+    console.log(searchVal);
     try {
       const response = await axios.post("http://127.0.0.1:8080/addSong", {song: searchVal, id:songList.length});
       console.log(response.data);

@@ -137,9 +137,18 @@ def addBillboard():
     response = requests.get(f'https://www.billboard.com/charts/hot-100/{date}')
     billboard = response.text
 
+
     soup = BeautifulSoup(billboard, 'html.parser')
-    songs = [x.text.replace("\n", "").replace("\t", "") for x in soup.select(".o-chart-results-list__item h3")]
-    artists = [x.text.replace("\n", "").replace("\t", "") for x in soup.select(".o-chart-results-list__item span")]
+    #tmp = [x.text for x in soup.select(".o-chart-results-list-row .lrv-a-unstyle-list > li > span")]
+    #print(tmp)
+    songs = [x.text.replace("\n", "").replace("\t", "") for x in soup.select(".o-chart-results-list-row .lrv-a-unstyle-list > li > h3")]
+    art_ = [x.text.replace("\n", "").replace("\t", "") for x in soup.select(".o-chart-results-list-row .lrv-a-unstyle-list > li > span")]
+    artists = []
+    num = 0
+    for i in range(len(art_)):
+        if num%7 == 0:
+            artists.append(art_[i])
+        num += 1
 
     music = []
 
@@ -198,10 +207,10 @@ def createPlaylist():
     return "create playlist"
     
 
-
 @app.route("/logout")
 def logout():
     return "log out"
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
