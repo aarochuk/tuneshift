@@ -129,38 +129,35 @@ def addApplePlaylist():
     print(song_uri)
     return song_uri
 
-@app.route("/addBillboard")
+@app.route("/addBillboard", methods=["POST"])
 def addBillboard():
-    date = input('What data would you want to travel back to? Enter the date in YYYY-MM-DD: ')
+    date = request.get_json()['date']
+    idd = request.get_json()['id']
 
     response = requests.get(f'https://www.billboard.com/charts/hot-100/{date}')
     billboard = response.text
 
     soup = BeautifulSoup(billboard, 'html.parser')
-
-    songs = soup.find_all(name='span', class_='chart-element__information__song')
-    songs = [x.text for x in songs]
-
-    artists = soup.find_all(name='span', class_='chart-element__information__artist')
-    artists = [x.text for x in artists]
+    songs = [x.text.replace("\n", "").replace("\t", "") for x in soup.select(".o-chart-results-list__item h3")]
+    artists = [x.text.replace("\n", "").replace("\t", "") for x in soup.select(".o-chart-results-list__item span")]
 
     music = []
 
     for i in range(len(songs)):
         music.append((songs[i], artists[i]))
 
-
+    scope = "user-library-read playlist-modify-private"
     auth = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
-            scope="playlist-modify-private",
-            redirect_uri="http://example.com",
-            client_id=SPOTIFY_CLIENT_ID,
-            client_secret=SPOTIFY_CLIENT_ID,
+            scope=scope,
+            redirect_uri="http://localhost:3000",
+            client_id="5fd6c7ca63044657ae73acff0ee3d798",
+            client_secret="62b4d40d59d34729a4824aab5eebe999",
             show_dialog=True,
-            cache_path="token.txt"
+            cache_path=".cache"
         )
     )
-    user_id = auth.current_user()["id"]
+    #user_id = auth.current_user()["id"]
 
     song_uri = []
 
@@ -169,15 +166,32 @@ def addBillboard():
         if auth.search(q=q, type='track', limit=1, offset=0)['tracks']['items'] == []:
             continue
         else:
-            song_uri.append(auth.search(q=q, type='track', limit=1, offset=0)['tracks']['items'][0]['uri'])
+            res = auth.search(q=q, type='track', limit=1, offset=0)['tracks']['items'][0]
+            millis = int(res['duration_ms'])
+            seconds=(res['duration_ms']/1000)%60
+            seconds = int(seconds)
+            minutes=(res['duration_ms']/(1000*60))%60
+            minutes = int(minutes)
 
-    new_playlist = auth.user_playlist_create(user_id, f'{date} Billboard Hot 100', public=False)
-    playlist_id = new_playlist['id']
-    auth.playlist_add_items('6mpPSaogl0uVqoBNuDBP4H', song_uri)
+            response = {
+                "id": idd,
+                "artists": [x['name'] for x in res['artists']],
+                "img": res['album']['images'][0]['url'],
+                "album": res['album']['name'],
+                "title": res['name'],
+                "time": str(minutes)+":"+str(seconds).rjust(2, "0"),
+                "uri": res['uri'],
+                "link": res['external_urls']['spotify']
+            }
+            idd += 1
+            song_uri.append(response)
+        
+    print(song_uri)
+    return song_uri
 
-@app.route("/removesong")
-def removeSong():
-    return "remove song"
+    #new_playlist = auth.user_playlist_create(user_id, f'{date} Billboard Hot 100', public=False)
+    #playlist_id = new_playlist['id']
+    #auth.playlist_add_items('6mpPSaogl0uVqoBNuDBP4H', song_uri)
 
 @app.route("/createPlaylist")
 def createPlaylist():

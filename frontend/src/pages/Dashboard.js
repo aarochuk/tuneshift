@@ -42,7 +42,18 @@ export default function Dashboard({route, navigation}) {
     }
   };
 
-  function billboard(){}
+  const billboard = async () => {
+    console.log(searchVal)
+    try {
+      const response = await axios.post("http://127.0.0.1:8080/addBillboard", {date: searchVal, id:songList.length});
+      console.log(response.data);
+      addSongList([...response.data, ...songList])
+      console.log(songList)
+    } catch (error) {
+      console.log("Error Occured");
+    }
+  };
+
   const applePlaylist = async () => {
     console.log(searchVal)
     try {
