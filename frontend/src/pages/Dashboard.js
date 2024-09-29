@@ -43,7 +43,17 @@ export default function Dashboard({route, navigation}) {
   };
 
   function billboard(){}
-  function applePlaylist(){}
+  const applePlaylist = async () => {
+    console.log(searchVal)
+    try {
+      const response = await axios.post("http://127.0.0.1:8080/addApplePlaylist", {playlist: searchVal, id:songList.length});
+      console.log(response.data);
+      addSongList([...response.data, ...songList])
+      console.log(songList)
+    } catch (error) {
+      console.log("Error Occured");
+    }
+  };
   //console.log(state)
   return(
     <div className="dashboardBody">
@@ -69,8 +79,10 @@ export default function Dashboard({route, navigation}) {
           <option value="apple">Add Apple Playlist</option>
         </select>
       </div>
-      {/* create display for if there are no songs that says there are no songs added yet or something */}
       {/* if there are multiple songs with the same name from the songs the user wants to add make screen for them to select the right one */}
+      {/**dont add multiple of the same song to the list */}
+      {/**save songs from the last session to an aws database or firebase */}
+      {/**add x to songs to remove songs from list */}
       {songList.length > 0 && <div className="songsHolder">
         <div className="songsHeader">
           <div className="songNameHolder">
@@ -96,7 +108,8 @@ export default function Dashboard({route, navigation}) {
             <div className="otherSongDetails">
               <p>{song.time}</p>
               <p>{song.album}</p>
-              <p><a href={song.link}>{song.title}</a></p>
+              {/**fix styling of the link */}
+              <p><a href={song.link} target="_blank">{song.title}</a></p>
             </div>
           </div>)
           })}
