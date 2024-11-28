@@ -1,5 +1,5 @@
 .dashboardBody{
-    height: 400vh;
+    min-height: 100vh;
     background-color: #FFFBE6;
     color: #0A6847;
 }
@@ -175,15 +175,29 @@ header{
     justify-content: space-between;
 }
 
-.inputBox > input {
+.inputBox > input{
     outline: none;
     border: none;
-    height: 120%;
+    height: 100%;
     width: 90%;
+    font-family:"Plus Jakarta Sans", sans-serif;
+}
+
+.bottomButtons > input{
+    outline: none;
+    border: none;
+    border-radius: 2em;
+    height: 4.5em;
+    width: 20em;
+    padding-inline: 2em;
     font-family:"Plus Jakarta Sans", sans-serif;
 }
 
 .inputBox > img {
     width: 2em;
     cursor: pointer;
+}
+
+.image-hovered {
+    opacity: 0.5; /* Adjust this value as needed */
 }

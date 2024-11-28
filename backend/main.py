@@ -10,17 +10,15 @@ import json
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-# make the authentication and use of the api proper
-
 @app.route("/spotifyAuth")
 def spotifyAuth():
     scope = "user-library-read playlist-modify-private"
     auth = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
             scope=scope,
-            redirect_uri="http://localhost:3000",
-            client_id="5fd6c7ca63044657ae73acff0ee3d798",
-            client_secret="62b4d40d59d34729a4824aab5eebe999",
+            redirect_uri=URI,
+            client_id=ID,
+            client_secret=SECRET,
             show_dialog=True,
             cache_path=".cache"
         )
@@ -35,9 +33,9 @@ def addSong():
     auth = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
             scope=scope,
-            redirect_uri="http://localhost:3000",
-            client_id="5fd6c7ca63044657ae73acff0ee3d798",
-            client_secret="62b4d40d59d34729a4824aab5eebe999",
+            redirect_uri=URI,
+            client_id=ID,
+            client_secret=SECRET,
             show_dialog=True,
             cache_path=".cache"
         )
@@ -62,7 +60,7 @@ def addSong():
         "uri": res['uri'],
         "link": res['external_urls']['spotify']
     }
-
+    print(response)
     return response
 
 @app.route("/addApplePlaylist", methods=['POST'])
@@ -81,9 +79,9 @@ def addApplePlaylist():
     auth = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
             scope=scope,
-            redirect_uri="http://localhost:3000",
-            client_id="5fd6c7ca63044657ae73acff0ee3d798",
-            client_secret="62b4d40d59d34729a4824aab5eebe999",
+            redirect_uri=URI,
+            client_id=ID,
+            client_secret=SECRET,
             show_dialog=True,
             cache_path=".cache"
         )
@@ -134,13 +132,10 @@ def addBillboard():
     date = request.get_json()['date']
     idd = request.get_json()['id']
 
-    response = requests.get(f'https://www.billboard.com/charts/hot-100/{date}')
+    response = requests.get(f'https://www.billboard.com/charts/hot-100/{date}/')
     billboard = response.text
 
-
     soup = BeautifulSoup(billboard, 'html.parser')
-    #tmp = [x.text for x in soup.select(".o-chart-results-list-row .lrv-a-unstyle-list > li > span")]
-    #print(tmp)
     songs = [x.text.replace("\n", "").replace("\t", "") for x in soup.select(".o-chart-results-list-row .lrv-a-unstyle-list > li > h3")]
     art_ = [x.text.replace("\n", "").replace("\t", "") for x in soup.select(".o-chart-results-list-row .lrv-a-unstyle-list > li > span")]
     artists = []
@@ -159,14 +154,13 @@ def addBillboard():
     auth = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
             scope=scope,
-            redirect_uri="http://localhost:3000",
-            client_id="5fd6c7ca63044657ae73acff0ee3d798",
-            client_secret="62b4d40d59d34729a4824aab5eebe999",
+            redirect_uri=URI,
+            client_id=ID,
+            client_secret=SECRET,
             show_dialog=True,
             cache_path=".cache"
         )
     )
-    #user_id = auth.current_user()["id"]
 
     song_uri = []
 
@@ -198,19 +192,33 @@ def addBillboard():
     print(song_uri)
     return song_uri
 
-    #new_playlist = auth.user_playlist_create(user_id, f'{date} Billboard Hot 100', public=False)
-    #playlist_id = new_playlist['id']
-    #auth.playlist_add_items('6mpPSaogl0uVqoBNuDBP4H', song_uri)
-
-@app.route("/createPlaylist")
+@app.route("/createPlaylist", methods=["POST"])
 def createPlaylist():
-    return "create playlist"
-    
+    playlist_name = request.get_json()['playlist_name']
+    songs = request.get_json()['songs']
 
-@app.route("/logout")
-def logout():
-    return "log out"
-    
+    scope = "playlist-modify-private"
+    auth = spotipy.Spotify(
+        auth_manager=SpotifyOAuth(
+            scope=scope,
+            redirect_uri=URI,
+            client_id=ID,
+            client_secret=SECRET,
+            show_dialog=True,
+            cache_path=".cache"
+        )
+    )
+
+    user_id = auth.current_user()['id']
+    new_playlist = auth.user_playlist_create(user_id, f'{playlist_name}', public=False)
+    playlist_id = new_playlist['id']
+    song_uri = [l['uri'] for l in songs]
+    print(songs)
+    print(song_uri)
+    # Adds the songs to the created playlists using the list of song uris
+    auth.playlist_add_items(playlist_id, song_uri)
+    return "successful"
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)

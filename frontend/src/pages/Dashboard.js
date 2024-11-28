@@ -5,20 +5,29 @@ import search from "../assets/search.png";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function Dashboard({route, navigation}) {
+export default function Dashboard() {
+  let navigate = useNavigate();
   const {state} = useLocation();
   const [showLog, setShowLog] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
   const [method, setMethod] = useState("song");
   const [songList, addSongList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
+  const [plName, setPlName] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
 
   function methodChange(e) {
     setMethod(e.target.value);
   }
 
   // add error handling and make sure searches are not done unless the searchVal is actually set to something
+
+  function deleteClicked(index){
+    const temp = [...songList]
+    temp.splice(index, 1)
+    addSongList(temp)
+  }
 
   function findSong(){
     if(method==="song"){
@@ -27,6 +36,19 @@ export default function Dashboard({route, navigation}) {
       billboard()
     }else{
       applePlaylist()
+    }
+  }
+
+  const createPlaylist = async () =>{
+    if(plName.length > 0){
+      try {
+        const response = await axios.post("http://127.0.0.1:8080/createPlaylist", {songs: songList, playlist_name:plName});
+        console.log(response.data);
+        addSongList([])
+      } catch (error) {
+        console.log("Error Occured");
+      }
+      setPlName("");
     }
   }
 
@@ -40,6 +62,7 @@ export default function Dashboard({route, navigation}) {
     } catch (error) {
       console.log("Error Occured");
     }
+    setSearchVal("");
   };
 
   const billboard = async () => {
@@ -52,6 +75,7 @@ export default function Dashboard({route, navigation}) {
     } catch (error) {
       console.log("Error Occured");
     }
+    setSearchVal("");
   };
 
   const applePlaylist = async () => {
@@ -64,7 +88,9 @@ export default function Dashboard({route, navigation}) {
     } catch (error) {
       console.log("Error Occured");
     }
+    setSearchVal("");
   };
+
   //console.log(state)
   return(
     <div className="dashboardBody">
@@ -72,14 +98,16 @@ export default function Dashboard({route, navigation}) {
         <h1>tuneshift</h1>
         {/* replace with users spotify image */}
         <div className="headerHolder">
-          {showLog && <button>logout</button>}
+          {showLog && <button onClick={()=>navigate('/')}>logout</button>}
           <img className="headerImg" onClick={() => setShowLog(!showLog)} src={state.images[1].url} alt="holder"/>
         </div>
       </header>
       <div className="addContainer">
         <h2>Add Song(s)</h2>
         <div className="inputBox">
-          <input placeholder="Enter song name" value={searchVal} onChange={e=>setSearchVal(e.target.value)}/>
+          {method==="song" && <input placeholder="Enter song name" value={searchVal} onChange={e=>setSearchVal(e.target.value)}/>}
+          {method==="billboard" && <input placeholder="Enter date for hot 100 in format YYYY-DD-MM" value={searchVal} onChange={e=>setSearchVal(e.target.value)}/>}
+          {method==="apple" && <input placeholder="Enter link to apple playlist" value={searchVal} onChange={e=>setSearchVal(e.target.value)}/>}
           <img src={search} onClick={findSong}/>
         </div>
         
@@ -106,11 +134,15 @@ export default function Dashboard({route, navigation}) {
           </div>
         </div>
         <div className="songs">
-          {songList.map((song)=>{
+          {songList.map((song, index)=>{
             return(
             <div className="songCard" key={song.id}>
             <div className="songNameHolder">
-              <img src={song.img}/>
+              <img src={song.img} onClick={()=>deleteClicked(index)}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className={`${isHovered ? 'image-hovered' : ''}`}
+              />
               <div>
                 <p>{song.title}</p>
                 <p>{song.artists.map((artist)=><span>{artist}{"   "}</span> )}</p>
@@ -127,8 +159,9 @@ export default function Dashboard({route, navigation}) {
         </div>
         <div className="bottomButtons">
           {/* add functionality where when you click these buttons new screen would come on top of the screen, the screen darkens and you can use the functionality of these buttons */}
-          <button className="helpButton"><img src={question}/><p>Help</p></button>
-          <button className="createButton">Create Playlist</button>
+          <input type="text"  placeholder="New Playlist Name" value={plName} onChange={e=>setPlName(e.target.value)}/>
+          <button className="createButton" onClick={createPlaylist}>Create Playlist</button>
+          
         </div>
       </div>}
       
